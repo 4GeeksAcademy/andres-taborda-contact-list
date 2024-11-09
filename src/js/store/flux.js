@@ -1,4 +1,4 @@
-const getState = ({ getStore, getActions, setStore }) => {
+const getState = ({ store, actions, setStore }) => {
 	return {
 		store: {
 			demo: [

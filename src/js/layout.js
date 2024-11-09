@@ -1,14 +1,14 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import ScrollToTop from "./component/scrollToTop";
-
-import { Home } from "./views/home";
-import { Demo } from "./views/demo";
-import { Single } from "./views/single";
 import injectContext from "./store/appContext";
-
-import { Navbar } from "./component/navbar";
-import { Footer } from "./component/footer";
+import { Contact } from "./views/Contact";
+import { AddContact } from "./views/AddContact";
+import { ContactProvider } from "./store/contactProvider";
+import { Login } from "./views/Login";
+import { PrivateRoutes } from "./routes/PrivateRoutes";
+import { PublicRoutes } from "./routes/PublicRoutes";
+import { Context } from "./store/contactContext";
+import { agendaTypes } from "./types/types";
 
 //create your first component
 const Layout = () => {
@@ -16,22 +16,48 @@ const Layout = () => {
 	// you can set the basename on the .env file located at the root of this project, E.g: BASENAME=/react-hello-webapp/
 	const basename = process.env.BASENAME || "";
 
+	const { dispatch } = useContext(Context)
+
+
+	useEffect(() => {
+		const user = JSON.parse(localStorage.getItem("user"))
+		if (user) {
+			dispatch({type: agendaTypes.CREATE, payload: { slug:user.slug, id: user.id }})
+		}
+	}, []);
+
 	return (
-		<div>
+		
+		<div className="container pt-5">
 			<BrowserRouter basename={basename}>
-				<ScrollToTop>
-					<Navbar />
 					<Routes>
-						<Route path="/" element={<Home />} />
-						<Route path="/demo" element={<Demo />} />
-						<Route path="/single/:theid" element={<Single />} />
+						<Route path="/*" element={
+							<PrivateRoutes>
+								<Routes>
+									<Route path='/contact' element={<Contact />} />
+									<Route path="add-contact" element={<AddContact />} />
+								</Routes>
+							</PrivateRoutes>	
+						} />
+							
+						<Route path="/auth/*" element={
+							<PublicRoutes>
+								<Routes>
+									<Route path='/Login' element={<Login />} />										
+								</Routes>
+							</PublicRoutes>	
+						} />
+							
+										
+						{/* <Route path="/" element={<Login />} />
+						<Route path="/contact" element={<Contact />} />
+						<Route path="add-contact" element={<AddContact />} /> */}
 						<Route path="*" element={<h1>Not found!</h1>} />
 					</Routes>
-					<Footer />
-				</ScrollToTop>
 			</BrowserRouter>
 		</div>
+		
 	);
 };
 
-export default injectContext(Layout);
+export default Layout;

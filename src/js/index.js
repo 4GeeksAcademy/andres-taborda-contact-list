@@ -7,10 +7,15 @@ import "../styles/index.css";
 
 //import your own components
 import Layout from './layout.js'
+import { ContactProvider } from './store/contactProvider.js';
 
 //
 const root = createRoot(document.querySelector("#app"))
 
 //render your react application
-root.render(<Layout/>)
+root.render(
+  <ContactProvider>
+    <Layout/>
+  </ContactProvider>
+)
 
