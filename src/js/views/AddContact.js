@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useForm } from '../commons/hooks/useForm'
 import { createContact, updateContact } from '../services/contactServices'
 import { Context } from '../store/contactContext'
@@ -13,12 +13,11 @@ const initialForm = {
 }
 
 export const AddContact = () => {
-
+  const navigate = useNavigate();
   const { store, dispatch } = useContext(Context)
   const { user } = store
 
   const { id } = useParams()
-  const formRef = useRef(null)
   const { formData, handleChange, preDataForm } = useForm(initialForm)
 
   const handleSubmit = (event) => {
@@ -28,14 +27,17 @@ export const AddContact = () => {
       createContact(user.slug, formData)
       .then(resp => {
         dispatch({ type: contactTypes.CREATE, payload: { contact: resp }})
-        formRef.current.reset()
+        navigate("/contact");     
       })
       .catch(console.log)
       return
     }
 
     updateContact(user.slug, formData)
-    .then(resp => dispatch({ type: contactTypes.UPDATE, payload: { contact: resp }}))
+    .then(resp => {
+      dispatch({ type: contactTypes.UPDATE, payload: { contact: resp }})
+      navigate("/contact");
+    })
     .catch(console.log)
     
   }
@@ -55,7 +57,7 @@ export const AddContact = () => {
   }, []);
 
   return (
-    <form ref={formRef} className='w-50 m-auto' onSubmit={handleSubmit}>
+    <form className='w-50 m-auto' onSubmit={handleSubmit}>
       <h2 className='text-center'>{!id ? 'Add a new contact' : 'Edit contact'}</h2>
       <div className="mb-3">
         <label htmlFor="exampleInputFullName" className="form-label">Full Name</label>
@@ -67,11 +69,14 @@ export const AddContact = () => {
       </div>
       <div className="mb-3">
         <label htmlFor="exampleInputPhone" className="form-label">Phone</label>
-        <input onChange={handleChange} defaultValue={formData.phone} name="phone" type="text" className="form-control" id="exampleInputPhone" placeholder='Enter phone' required/>
+        <input onChange={handleChange} defaultValue={formData.phone} name="phone" type="tel" className="form-control" id="exampleInputPhone" placeholder='Enter phone' pattern="\d{3}-\d{2}-\d{2}-\d{2}" aria-describedby="phoneHelpBlock" maxLength={12} required/>
+        <div id="phoneHelpBlock" className="form-text">
+          Please, enter your phone in format XXX-XX-XX-XX.
+        </div>
       </div>
       <div className="mb-3">
         <label htmlFor="exampleInputAddress" className="form-label">Address</label>
-        <input onChange={handleChange} defaultValue={formData.address} name="address" type="text" className="form-control" id="exampleInputPhone" placeholder='Enter address' required/>
+        <input onChange={handleChange} defaultValue={formData.address} name="address" type="text" className="form-control" id="exampleInputAddress" placeholder='Enter address' required/>
       </div>      
       <button type="submit" className="btn btn-primary w-100 mb-3">{id ? 'Update' : 'Save'}</button>
       <div>

@@ -1,7 +1,8 @@
 export const agendaTypes = {
   CREATE: "CREATE_AGENDA",
   GET_SINGLE: "GET_SINGLE_AGENDA",
-  DELETE: "DELETE_AGENDA"
+  DELETE: "DELETE_AGENDA",
+  LOGOUT: "LOGOUT"
 }
 
 export const contactTypes = {

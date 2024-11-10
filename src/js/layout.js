@@ -9,6 +9,8 @@ import { PrivateRoutes } from "./routes/PrivateRoutes";
 import { PublicRoutes } from "./routes/PublicRoutes";
 import { Context } from "./store/contactContext";
 import { agendaTypes } from "./types/types";
+import { NotFound } from "./views/NotFound";
+import { getAgenda } from "./services/agendaServices";
 
 //create your first component
 const Layout = () => {
@@ -19,10 +21,21 @@ const Layout = () => {
 	const { dispatch } = useContext(Context)
 
 
+	const isLogin = async (user) => {
+		
+		const data = await getAgenda(user.slug)
+		
+		if (!data) {
+			localStorage.removeItem("user")			
+			return			
+		}
+
+		dispatch({type: agendaTypes.CREATE, payload: { slug:data.slug, id: data.id }})		
+	}
 	useEffect(() => {
 		const user = JSON.parse(localStorage.getItem("user"))
 		if (user) {
-			dispatch({type: agendaTypes.CREATE, payload: { slug:user.slug, id: user.id }})
+			isLogin(user)
 		}
 	}, []);
 
@@ -34,8 +47,8 @@ const Layout = () => {
 						<Route path="/*" element={
 							<PrivateRoutes>
 								<Routes>
-									<Route path='/contact' element={<Contact />} />
-									<Route path="/add-contact/:id?" element={<AddContact />} />
+									<Route path='contact' element={<Contact />} />
+									<Route path="add-contact/:id?" element={<AddContact />} />
 								</Routes>
 							</PrivateRoutes>	
 						} />
@@ -48,7 +61,7 @@ const Layout = () => {
 							</PublicRoutes>	
 						} />
 																							
-						<Route path="*" element={<h1>Not found!</h1>} />
+						<Route path="*" element={<NotFound />} />
 					</Routes>
 			</BrowserRouter>
 		</div>

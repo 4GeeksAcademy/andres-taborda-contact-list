@@ -9,5 +9,5 @@ export const PublicRoutes = ({ children }) => {
 
   return (!user.slug)
   ? children
-  : <Navigate to="/contact" replace={true} />
+  : <Navigate to="/contact"  />
 }

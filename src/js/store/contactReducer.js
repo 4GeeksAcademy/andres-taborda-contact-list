@@ -5,6 +5,12 @@ export const contactReducer = (store, action) => {
   
   
   switch (action.type) {
+    case agendaTypes.LOGOUT:
+      return{
+        ...store, 
+        user: {...store.user, slug: '', id: null}
+      };
+
     case agendaTypes.CREATE: 
       return {
         ...store, 

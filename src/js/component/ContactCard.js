@@ -37,7 +37,12 @@ export const ContactCard = ({...Props}) => {
           <Link className="bg-transparent border border-0 mx-2 text-black" to={`/add-contact/${id}`} >
             <i className="fas fa-pencil-alt"></i> 
           </Link>
-          <button className="bg-transparent border border-0 mx-2" onClick={() => Props.delete(id) }>
+          <button 
+            className="bg-transparent border border-0 mx-2" 
+            onClick={() => Props.delete(id) }
+            data-bs-toggle="modal" 
+            data-bs-target="#staticBackdrop"
+            >
             <i className="fas fa-trash-alt"></i> 
           </button>
         </div>

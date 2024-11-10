@@ -9,5 +9,5 @@ export const PrivateRoutes = ({ children }) => {
 
   return (user.slug)
   ? children          
-  : <Navigate to="/auth/login" replace={true} />
+  : <Navigate to="/auth/login" />
 }
