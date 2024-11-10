@@ -1,14 +1,16 @@
 import React from 'react'
 import rigo from "../../img/rigo-baby.jpg";
+import { Link } from 'react-router-dom';
 
-export const ContactCard = ({ contact }) => {
+export const ContactCard = ({...Props}) => {
+
   const {
     name,
     phone,
     email,
     address,
     id
-  } = contact
+  } = Props.contact
 
   return (
     <div className='card'>
@@ -32,10 +34,10 @@ export const ContactCard = ({ contact }) => {
           </ul>
         </div>
         <div className="col-3 d-flex justify-content-end align-items-start p-5 fs-5">
-          <button className="bg-transparent border border-0 mx-2">
+          <Link className="bg-transparent border border-0 mx-2 text-black" to={`/add-contact/${id}`} >
             <i className="fas fa-pencil-alt"></i> 
-          </button>
-          <button className="bg-transparent border border-0 mx-2">
+          </Link>
+          <button className="bg-transparent border border-0 mx-2" onClick={() => Props.delete(id) }>
             <i className="fas fa-trash-alt"></i> 
           </button>
         </div>

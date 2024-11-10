@@ -11,5 +11,12 @@ export const useForm = ( initialForm = {} ) => {
     })
   }
 
-  return { formData, handleChange }
+  const preDataForm = (data) => {
+    setFormData({
+      ...formData,
+      ...data
+    })
+  }
+
+  return { formData, handleChange, preDataForm }
 }

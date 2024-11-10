@@ -35,7 +35,7 @@ const Layout = () => {
 							<PrivateRoutes>
 								<Routes>
 									<Route path='/contact' element={<Contact />} />
-									<Route path="add-contact" element={<AddContact />} />
+									<Route path="/add-contact/:id?" element={<AddContact />} />
 								</Routes>
 							</PrivateRoutes>	
 						} />
@@ -47,11 +47,7 @@ const Layout = () => {
 								</Routes>
 							</PublicRoutes>	
 						} />
-							
-										
-						{/* <Route path="/" element={<Login />} />
-						<Route path="/contact" element={<Contact />} />
-						<Route path="add-contact" element={<AddContact />} /> */}
+																							
 						<Route path="*" element={<h1>Not found!</h1>} />
 					</Routes>
 			</BrowserRouter>
